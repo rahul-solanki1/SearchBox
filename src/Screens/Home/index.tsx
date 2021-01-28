@@ -12,15 +12,15 @@ const Home: React.FC<{}> = () => {
   useEffect(() => {
     const word = helper.getLastWord(value);
 
+    getSuggestions(word);
+  }, [value]);
+
+  const getSuggestions = (word: string) => {
     if (word.length === 0) {
       setSuggestions([]);
       return;
     }
 
-    getSuggestions(word);
-  }, [value]);
-
-  const getSuggestions = (word: string) => {
     MockAPI.getSuggestions(word)
       .then((values) => {
         let suggestionList = values as string[];
