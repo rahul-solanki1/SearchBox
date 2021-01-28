@@ -58,56 +58,25 @@ const AutocompleteInput: React.FC<Props> = (props) => {
           style={[{width: window.width - 20}, styles.suggestionList]}
           data={suggestion}
           keyExtractor={(item, index) => `${index}`}
-          renderItem={({item, index}) => {
-            const values = highlightWord.length
-              ? item.split(highlightWord)
-              : [item];
-
-            var texts = [];
-
-            if (item.indexOf(highlightWord) === 0) {
-              texts.push(
-                <Text key={0} style={styles.highlightWord}>
-                  {highlightWord}
-                </Text>,
-              );
-            }
-
-            values.forEach((value, valueIndex) => {
-              console.log('Log: ', item, values, highlightWord);
-              if (values.length === 1 && values[0] === highlightWord) {
-                return;
-              }
-              texts.push(<Text key={texts.length}>{value}</Text>);
-              if (values.length > 1 && valueIndex < values.length - 1) {
-                texts.push(
-                  <Text key={texts.length} style={styles.highlightWord}>
-                    {highlightWord}
-                  </Text>,
-                );
-              }
-            });
-
-            // if (values.length === 2) {
-            //   texts.push(
-            //     <Text key={0}>{values[0]}</Text>,
-            //     <Text key={1} style={styles.highlightWord}>
-            //       {highlightWord}
-            //     </Text>,
-            //     <Text key={2}>{values[1]}</Text>,
-            //   );
-            // } else {
-            //   texts.push(
-            //     <Text key={0}>{values[0]}</Text>,
-            //     <Text key={1} style={styles.highlightWord}>
-            //       {highlightWord}
-            //     </Text>,
-            //   );
-            // }
-
+          renderItem={({item}) => {
+            const parts = item.split(new RegExp(`(${highlightWord})`, 'gi'));
+            console.log(
+              'LOg: ',
+              item.split(new RegExp(`(${highlightWord})`, 'gi')),
+            );
             return (
               <TouchableOpacity onPress={() => onSelected(item)}>
-                <Text style={styles.itemText}>{texts}</Text>
+                <Text style={styles.itemText}>
+                  {parts.map((part, index) =>
+                    part.toLowerCase() === highlightWord.toLowerCase() ? (
+                      <Text key={index} style={styles.highlightWord}>
+                        {part}
+                      </Text>
+                    ) : (
+                      part
+                    ),
+                  )}
+                </Text>
               </TouchableOpacity>
             );
           }}
