@@ -42,4 +42,9 @@ const getSuggestions = (text: string) => {
   });
 };
 
-export {getRandomBool, getSuggestions};
+const MockAPI = {
+  getRandomBool,
+  getSuggestions,
+};
+
+export {MockAPI};

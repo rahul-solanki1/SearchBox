@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -9,47 +9,108 @@ import {
   FlatList,
   useWindowDimensions,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface Props {
   value?: string;
-  onValueChange?: (value: string) => void;
-  onKeyPress?: (value: string) => void;
-  suggestion?: Array<string>;
-}
-
-interface SuggestionListProps {
   style?: StyleProp<ViewStyle>;
-  dataList?: Array<String>;
+  highlightWord?: string;
+  onFocus?: () => void;
+  onValueChange?: (value: string) => void;
+  onSuggestionSelected?: (value: string) => void;
+  suggestion: string[];
 }
-
-const SuggestionList: React.FC<SuggestionListProps> = (props) => {
-  const window = useWindowDimensions();
-  return (
-    <FlatList
-      style={[{width: window.width - 20}, props.style]}
-      data={props.dataList}
-      keyExtractor={(item, index) => `${index}`}
-      renderItem={({item}) => <Text style={styles.itemText}>{item}</Text>}
-    />
-  );
-};
 
 const AutocompleteInput: React.FC<Props> = (props) => {
+  const textInput = useRef<TextInput>(null);
+
+  const {
+    value,
+    onValueChange,
+    suggestion,
+    highlightWord = '',
+    onSuggestionSelected,
+  } = props;
+
+  const onSelected = (selectedItem: string) => {
+    onSuggestionSelected && onSuggestionSelected(`${selectedItem} `);
+    textInput.current?.focus();
+  };
+
+  const window = useWindowDimensions();
+
   return (
-    <View style={styles.container}>
+    <View style={[props.style, styles.container]}>
       <TextInput
-        style={styles.textInput}
-        onChangeText={props.onValueChange}
-        value={props.value}
-        onFocus={() => console.log('Focused')}
-        onKeyPress={(e) =>
-          props.onKeyPress && props.onKeyPress(e.nativeEvent.key)
-        }
+        ref={textInput}
+        style={[
+          styles.textInput,
+          textInput.current?.isFocused() && styles.textInputFocused,
+        ]}
+        onChangeText={onValueChange}
+        autoCorrect={false}
+        value={value}
+        onFocus={props.onFocus}
       />
-      {props.suggestion?.length ? (
-        <SuggestionList
-          style={styles.suggestionList}
-          dataList={props.suggestion}
+
+      {suggestion.length !== 0 ? (
+        <FlatList
+          style={[{width: window.width - 20}, styles.suggestionList]}
+          data={suggestion}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({item, index}) => {
+            const values = highlightWord.length
+              ? item.split(highlightWord)
+              : [item];
+
+            var texts = [];
+
+            if (item.indexOf(highlightWord) === 0) {
+              texts.push(
+                <Text key={0} style={styles.highlightWord}>
+                  {highlightWord}
+                </Text>,
+              );
+            }
+
+            values.forEach((value, valueIndex) => {
+              console.log('Log: ', item, values, highlightWord);
+              if (values.length === 1 && values[0] === highlightWord) {
+                return;
+              }
+              texts.push(<Text key={texts.length}>{value}</Text>);
+              if (values.length > 1 && valueIndex < values.length - 1) {
+                texts.push(
+                  <Text key={texts.length} style={styles.highlightWord}>
+                    {highlightWord}
+                  </Text>,
+                );
+              }
+            });
+
+            // if (values.length === 2) {
+            //   texts.push(
+            //     <Text key={0}>{values[0]}</Text>,
+            //     <Text key={1} style={styles.highlightWord}>
+            //       {highlightWord}
+            //     </Text>,
+            //     <Text key={2}>{values[1]}</Text>,
+            //   );
+            // } else {
+            //   texts.push(
+            //     <Text key={0}>{values[0]}</Text>,
+            //     <Text key={1} style={styles.highlightWord}>
+            //       {highlightWord}
+            //     </Text>,
+            //   );
+            // }
+
+            return (
+              <TouchableOpacity onPress={() => onSelected(item)}>
+                <Text style={styles.itemText}>{texts}</Text>
+              </TouchableOpacity>
+            );
+          }}
         />
       ) : null}
     </View>
@@ -65,10 +126,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'gray',
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 0.5,
     height: 40,
     margin: 10,
     paddingHorizontal: 10,
+  },
+  textInputFocused: {
+    borderColor: 'blue',
   },
   suggestionList: {
     backgroundColor: 'white',
@@ -81,8 +145,10 @@ const styles = StyleSheet.create({
   },
   itemText: {
     borderColor: 'gray',
-    borderWidth: 0.5,
     padding: 10,
+  },
+  highlightWord: {
+    backgroundColor: 'yellow',
   },
 });
 
