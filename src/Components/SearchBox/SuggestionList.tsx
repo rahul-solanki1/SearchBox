@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   StyleProp,
   StyleSheet,
@@ -6,7 +7,8 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
-import {HighlightText} from './HighlightText';
+
+import {HighlightText} from '../HighlightText';
 
 interface Props {
   suggestions?: string[];
@@ -56,10 +58,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 10,
     borderWidth: 0.5,
-    left: 10,
-    right: 10,
     position: 'absolute',
-    top: 50,
+    top: 45,
+    left: 0,
+    right: 0,
   },
   itemText: {
     borderColor: 'gray',

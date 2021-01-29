@@ -1,30 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {SearchBox} from '../../Components';
 import {MockAPI} from '../../Services/API';
 import {helper} from '../../Util';
 
 const Home: React.FC<{}> = () => {
-  const [value, setValue] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  useEffect(() => {
-    const word = helper.getLastWord(value);
-
-    getSuggestions(word);
-  }, [value]);
+  const placeholder = 'Please enter the search query into the widget.';
 
   const getSuggestions = (word: string) => {
     if (word.length === 0) {
-      setSuggestions([]);
       return;
     }
 
@@ -39,35 +25,28 @@ const Home: React.FC<{}> = () => {
       });
   };
 
-  const onSuggestionSelected = (item: string) => {
-    setSuggestions([]);
-
-    setValue(
-      value.substr(0, value.lastIndexOf(helper.getLastWord(value))) + item,
-    );
+  const onValueChange = (value: string) => {
+    const word = helper.getLastWord(value);
+    getSuggestions(word);
   };
 
-  const onFocusOut = () => {
-    Keyboard.dismiss();
-    setSuggestions([]);
+  const onFocus = (text: string) => {
+    text.length && getSuggestions(helper.getLastWord(text));
   };
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback
-        containerStyle={styles.floatingButtom}
-        accessible={false}
-        onPress={() => onFocusOut()}
-      />
       <SearchBox
-        value={value}
-        highlightWord={helper.getLastWord(value)}
+        containerStyle={styles.searchBox}
+        // inputBoxStyle={styles.inputBoxStyle}
+        // inputBoxFocusedStyle={styles.inputBoxFocusedStyle}
+        // suggestionContainerStyle={styles.listStyle}
+        // textStyle={styles.textStyle}
+        // highlightedTextStyle={styles.highlightedTextStyle}
         suggestions={suggestions}
-        onValueChange={setValue}
-        onFocus={() =>
-          value.length && getSuggestions(helper.getLastWord(value))
-        }
-        onSuggestionSelected={onSuggestionSelected}
+        onValueChange={onValueChange}
+        placeholder={placeholder}
+        onFocus={onFocus}
       />
     </View>
   );
@@ -77,13 +56,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  floatingButtom: {
-    flex: 1,
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
+  searchBox: {
+    marginHorizontal: 10,
+  },
+  inputBoxStyle: {
+    borderColor: 'gray',
+    borderRadius: 0,
+  },
+  inputBoxFocusedStyle: {
+    borderColor: 'green',
+  },
+  listStyle: {
+    padding: 10,
+  },
+  textStyle: {
+    color: 'gray',
+  },
+  highlightedTextStyle: {
+    color: 'green',
+    backgroundColor: 'red',
   },
 });
 
