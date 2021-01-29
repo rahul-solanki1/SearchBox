@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, StyleSheet, View} from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {SearchBox} from '../../Components';
 import {MockAPI} from '../../Services/API';
@@ -48,20 +55,20 @@ const Home: React.FC<{}> = () => {
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        containerStyle={styles.container}
+        containerStyle={styles.floatingButtom}
         accessible={false}
-        onPress={() => onFocusOut()}>
-        <SearchBox
-          value={value}
-          highlightWord={helper.getLastWord(value)}
-          suggestions={suggestions}
-          onValueChange={setValue}
-          onFocus={() =>
-            value.length && getSuggestions(helper.getLastWord(value))
-          }
-          onSuggestionSelected={onSuggestionSelected}
-        />
-      </TouchableWithoutFeedback>
+        onPress={() => onFocusOut()}
+      />
+      <SearchBox
+        value={value}
+        highlightWord={helper.getLastWord(value)}
+        suggestions={suggestions}
+        onValueChange={setValue}
+        onFocus={() =>
+          value.length && getSuggestions(helper.getLastWord(value))
+        }
+        onSuggestionSelected={onSuggestionSelected}
+      />
     </View>
   );
 };
@@ -69,6 +76,14 @@ const Home: React.FC<{}> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  floatingButtom: {
+    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });
 
