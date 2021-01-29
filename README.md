@@ -1,4 +1,4 @@
-# App
+# SearchBox
 
 App is a test task for searching with text input suggestions & text highlisting in react-native.
 
@@ -20,7 +20,7 @@ You must have a React-Native environment setup on your machine. Follow the steps
 
 Scripts are added at the root level of the project in `package.json`.
 
-Once `ttab` is installed, from the project's root directory the scripts can be run. Following is the description of each script in the table below. It can be used like: `npm run <script>`.
+From the project's root directory, the scripts can be run. Following is the description of each script in the table below. It can be used like: `npm run <script>` or `yarn run <script>`.
 
 | Script      | Description                                      |
 | ----------- | ------------------------------------------------ |

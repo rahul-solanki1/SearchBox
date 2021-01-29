@@ -28,8 +28,11 @@ const HighlightText: React.FC<Props> = (props) => {
     onSelected,
   } = props;
 
+  // Used regex to split the suggestion string matching with the highlighted word.
   const parts = value.split(new RegExp(`(${highlightWord})`, 'gi'));
 
+  // If highlighted word is not provided, simply show the value. If word is present, run map function and check whether the items in the parts match the
+  // highlighted word. If yes then created the text with highlighted style. If no directory return the string.
   const elements = highlightWord.length
     ? parts.map((part, index) => {
         if (part.toLowerCase() === highlightWord.toLowerCase()) {
@@ -45,6 +48,7 @@ const HighlightText: React.FC<Props> = (props) => {
       })
     : value;
 
+  // Render the mapped elements inside a text.
   return (
     <TouchableOpacity onPress={() => onSelected && onSelected(value)}>
       <Text style={[styles.itemText, textStyle]}>{elements}</Text>

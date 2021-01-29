@@ -9,7 +9,7 @@ const getRandomBool = (n: number) => {
   return Math.floor(Math.random() * maxRandomCoeff) % n === 0;
 };
 
-const getSuggestions = (text: string) => {
+const getSuggestions: (text: string) => Promise<string[]> = (text) => {
   var pre = 'pre';
   var post = 'post';
   var results: Array<string> = [];

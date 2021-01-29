@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import {
   Keyboard,
@@ -15,6 +15,8 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {helper} from '../../Util';
 
 import {SuggestionList} from './SuggestionList';
+
+const INTERVAL = 500;
 
 interface Props {
   placeholder?: string;
@@ -48,14 +50,15 @@ interface Props {
  * @param {StyleProp<TextStyle>} highlightedTextStyle style how the word should highlight in suggestion list
  */
 const SearchBox: React.FC<Props> = (props) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(''); // Hold the current value typed in input box
 
-  const [highlightWord, setHighlightWord] = useState('');
+  const [highlightWord, setHighlightWord] = useState(''); // Hold highlighted word
 
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]); // Hold suggestions list
 
-  const textInput = useRef<TextInput>(null);
+  const textInput = useRef<TextInput>(null); // Keeping the text input reference for focusing out when tapped outside.
 
+  // props destructuring.
   const {
     suggestionContainerStyle,
     textStyle,
@@ -68,30 +71,54 @@ const SearchBox: React.FC<Props> = (props) => {
     onFocus,
   } = props;
 
+  /**
+   * Executre the useEffect when new suggestions list is received
+   */
   useEffect(() => {
-    setHighlightWord(helper.getLastWord(value));
-    setSuggestions(props.suggestions || []);
+    setHighlightWord(helper.getLastWord(value)); // Get the last word from the value to update the highlight
+
+    setSuggestions(props.suggestions || []); // Set the props list to internal suggestion list.
   }, [props.suggestions]);
 
+  /**
+   * Called when user tap outside the SearchBox
+   */
   const onFocusOut = () => {
-    Keyboard.dismiss();
-    setSuggestions([]);
+    Keyboard.dismiss(); // Dismiss the keyboard
+
+    setSuggestions([]); // Empty the suggestion to hide the list.
   };
 
+  /**
+   * Callback when the item in the suggestion list is selected
+   * @param {string} selectedItem Selected Item
+   */
   const onSelected = (selectedItem: string) => {
-    setSuggestions([]);
+    setSuggestions([]); //Empty the list
 
+    // Get the last word index and create a sub string from 0 index to the last index where the searching word starts.
     const newValue =
       value.substr(0, value.lastIndexOf(helper.getLastWord(value))) +
-      `${selectedItem} `;
-
-    setValue(newValue);
-    onValueChange && onValueChange(newValue);
-    textInput.current?.focus();
+      `${selectedItem} `; // Create the newValue from selected word. And append extra space at the end for continuous typing.
+    console.log(textInput.current);
+    setValue(newValue); // Set the newValue to state hook
+    onValueChange && onValueChange(newValue); // If props contains value change listener then update the parent for value change.
+    textInput.current?.focus(); // Bring the focus to text input for continuous typing.
   };
+
+  // Callback for debouncing function.
+  const callback = useCallback(
+    helper.debounce((text: string) => {
+      setValue(text);
+      setSuggestions([]);
+      onValueChange && onValueChange(text);
+    }, INTERVAL),
+    [],
+  );
 
   return (
     <>
+      {/*  Floating button for dismissing the text input focus mode. */}
       <TouchableWithoutFeedback
         containerStyle={styles.floatingButtom}
         accessible={false}
@@ -106,17 +133,13 @@ const SearchBox: React.FC<Props> = (props) => {
             textInput.current?.isFocused() &&
               Object.assign(styles.textInputFocused, inputBoxFocusedStyle),
           ]}
-          onChangeText={helper.debounce((text: string) => {
-            setValue(text);
-            setSuggestions([]);
-            onValueChange && onValueChange(text);
-          })}
+          onChange={(e) => setValue(e.nativeEvent.text)}
+          // Added debounce to ignore calling getsuggestion continuosly, so that user experience can be improved.
+          value={value}
+          onChangeText={callback}
           placeholder={placeholder}
-          autoCorrect={false}
-          onFocus={() => {
-            setSuggestions([]);
-            onFocus && onFocus(value);
-          }}
+          autoCorrect={false} // Disable auto correct for the input field.
+          onFocus={() => onFocus && onFocus(value)} // When input text comes in focus and last word is not ending with space we fetch the suggest list.
         />
         <SuggestionList
           listStyle={suggestionContainerStyle}

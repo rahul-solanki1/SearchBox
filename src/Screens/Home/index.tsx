@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
+
 import {StyleSheet, View} from 'react-native';
+
 import {SearchBox} from '../../Components';
+
 import {MockAPI} from '../../Services/API';
+
 import {helper} from '../../Util';
 
 const Home: React.FC<{}> = () => {
@@ -9,15 +13,24 @@ const Home: React.FC<{}> = () => {
 
   const placeholder = 'Please enter the search query into the widget.';
 
+  /**
+   *
+   * @param {string} word Pass the word to fetch suggestions from Mock API
+   */
   const getSuggestions = (word: string) => {
-    if (word.length === 0) {
+    /**
+     * If word is empty, fetching suggestion is discarded.
+     */
+    if (!word.length) {
       return;
     }
 
     MockAPI.getSuggestions(word)
       .then((values) => {
-        let suggestionList = values as string[];
+        let suggestionList = values;
+
         console.log(suggestionList);
+
         setSuggestions(suggestionList);
       })
       .catch((error) => {
@@ -25,13 +38,19 @@ const Home: React.FC<{}> = () => {
       });
   };
 
-  const onValueChange = (value: string) => {
+  /**
+   * Callback when value is updated in SearchBox.
+   * @param {string} value Gives updated value of the SearchBox
+   */
+  const onFocusOrValueChange = (value: string) => {
+    /**
+     * Get the last word of the value using helper method
+     */
     const word = helper.getLastWord(value);
+    /**
+     * Pass the word to getSuggestion method.
+     */
     getSuggestions(word);
-  };
-
-  const onFocus = (text: string) => {
-    text.length && getSuggestions(helper.getLastWord(text));
   };
 
   return (
@@ -44,9 +63,9 @@ const Home: React.FC<{}> = () => {
         // textStyle={styles.textStyle}
         // highlightedTextStyle={styles.highlightedTextStyle}
         suggestions={suggestions}
-        onValueChange={onValueChange}
+        onValueChange={onFocusOrValueChange}
+        onFocus={onFocusOrValueChange}
         placeholder={placeholder}
-        onFocus={onFocus}
       />
     </View>
   );

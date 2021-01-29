@@ -40,15 +40,17 @@ const SuggestionList: React.FC<Props> = (props) => {
     highlightedTextStyle,
   } = props;
 
+  // If the suggestions list is null or emptry return null to ignore rendering.
   if (suggestions && !suggestions.length) {
     return null;
   }
 
   return (
     <View style={[styles.suggestionList, listStyle]}>
-      <FlatList
+      <FlatList // Using flatlist for showing suggestion list.
         data={suggestions}
-        keyExtractor={(item, index) => `${index}`}
+        keyExtractor={(item, index) => `${index}`} // Provide the key extractor so that each item in the list can be identified.
+        // When list is shown and it is clickable. So the flatlist tap gesture interferes with the clickable item rendering insdie. This helps to solve the problem.
         keyboardShouldPersistTaps="handled"
         renderItem={({item}) => (
           <HighlightText
