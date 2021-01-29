@@ -73,4 +73,6 @@ Please follow the below table for available style props.
 
 ## Demo
 
-![](SearchBar.gif)
+<p align="center">
+  <img src="https://github.com/rahul-solanki1/SearchBox/blob/master/SearchBar.gif" alt="SearchBar"/>
+</p>
