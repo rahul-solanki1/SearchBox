@@ -1,6 +1,10 @@
 # SearchBox
 
-App is a test task for searching with text input suggestions & text highlisting in react-native.
+A react-native App, demonstrating an input box that provides suggestions.
+
+### Environment Setup
+
+You must have a React-Native environment setup on your machine. Follow the steps described in **React Native CLI Quickstart** tab in [Setting up the development environment](https://reactnative.dev/docs/environment-setup).
 
 ### Installation
 
@@ -10,48 +14,29 @@ Install the dependencies and devDependencies and start the server.
 $ git clone <repo-url>
 $ cd SearchBox
 $ yarn install
+$ npx pod-install
 ```
-
-### Environment Setup
-
-You must have a React-Native environment setup on your machine. Follow the steps described in **React Native CLI Quickstart** tab in [Setting up the development environment](https://reactnative.dev/docs/environment-setup).
 
 ### Run
 
-Scripts are added at the root level of the project in `package.json`.
-
-From the project's root directory, the scripts can be run. Following is the description of each script in the table below. It can be used like: `npm run <script>` or `yarn run <script>`.
-
-| Script      | Description                                      |
-| ----------- | ------------------------------------------------ |
-| installPods | Install all the dependencies for the apps to run |
-| ios         | Run both the iOS apps with metro bundler         |
-| android     | Run both the android apps with metro bundler     |
-
-Note: `installPods` is a must before running the app for iOS.
-
-### Run App
+First got to the project's root directory
 
 ```bash
 cd SearchBox
 ```
 
-Now any of the following app can be run specific to OS:
-iOS App:
+Now any of the following apps can be run as needed:
+`npm run <script>` or `yarn run <script>`
 
 ```bash
-react-native run-ios
-```
-
-Android App
-
-```bash
-react-native run-android
+yarn ios // iOS App
+yarn android // Android App
 ```
 
 ## How to use:
 
-The SearchBox is fully customizable. You can style each components in the SearchBox. Please follow the below table for available style props.
+The SearchBox is customizable. Each component in the SearchBox can be customized.
+Please follow the below table for available style props.
 
 ## Style Props
 
@@ -75,7 +60,15 @@ The SearchBox is fully customizable. You can style each components in the Search
 
 ## Listeners
 
-| Listener      | Type                           | Description                                                                                                                                                   |
-| ------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| onValueChange | Optional((text: string)=>void) | Value change listener gives callback with the current value, when value in the SearchBox changes by entering value or by selecting item from suggestion list. |
-| onFocus       | Optional((text: string)=>void) | Focus listener gives callback when SearchBox comes in focus.                                                                                                  |
+| Listener      | Type                           | Description                                                                                                                                                               |
+| ------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| onValueChange | Optional((text: string)=>void) | Value change listener gives callback with the current value when the value in the SearchBox changes by entering a value or by selecting an item from the suggestion list. |
+| onFocus       | Optional((text: string)=>void) | Focus listener gives callback when SearchBox comes in focus.                                                                                                              |
+
+## Notes
+
+1. I have tried to create a reusable and customizable component
+2. Added debounce for optimization and better UX
+3. Created smaller components like `HighlightText` so that these can also be reused
+
+## Demo

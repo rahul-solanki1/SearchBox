@@ -61,7 +61,9 @@ const styles = StyleSheet.create({
     color: '#19384a',
     fontWeight: '600',
     borderColor: 'gray',
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontSize: 16,
   },
   highlightWord: {
     backgroundColor: 'yellow',

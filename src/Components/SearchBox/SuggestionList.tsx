@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   suggestionList: {
     backgroundColor: 'white',
     borderColor: 'black',
-    borderRadius: 10,
+    borderRadius: 4,
     borderWidth: 0,
     position: 'absolute',
     top: 45,

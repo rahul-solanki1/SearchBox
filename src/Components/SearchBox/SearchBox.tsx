@@ -50,13 +50,14 @@ interface Props {
  * @param {StyleProp<TextStyle>} highlightedTextStyle style how the word should highlight in suggestion list
  */
 const SearchBox: React.FC<Props> = (props) => {
-  const [value, setValue] = useState(''); // Hold the current value typed in input box
-
-  const [highlightWord, setHighlightWord] = useState(''); // Hold highlighted word
-
-  const [suggestions, setSuggestions] = useState<string[]>([]); // Hold suggestions list
-
-  const textInput = useRef<TextInput>(null); // Keeping the text input reference for focusing out when tapped outside.
+  // Hold the current value typed in input box
+  const [value, setValue] = useState('');
+  // Hold highlighted word
+  const [highlightWord, setHighlightWord] = useState('');
+  // Hold suggestions list
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  // Keeping the text input reference for focusing out when tapped outside.
+  const textInput = useRef<TextInput>(null);
 
   // props destructuring.
   const {
@@ -75,18 +76,20 @@ const SearchBox: React.FC<Props> = (props) => {
    * Executre the useEffect when new suggestions list is received
    */
   useEffect(() => {
-    setHighlightWord(helper.getLastWord(value)); // Get the last word from the value to update the highlight
-
-    setSuggestions(props.suggestions || []); // Set the props list to internal suggestion list.
+    // Get the last word from the value to update the highlight
+    setHighlightWord(helper.getLastWord(value));
+    // Set the props list to internal suggestion list.
+    setSuggestions(props.suggestions || []);
   }, [props.suggestions]);
 
   /**
    * Called when user tap outside the SearchBox
    */
   const onFocusOut = () => {
-    Keyboard.dismiss(); // Dismiss the keyboard
-
-    setSuggestions([]); // Empty the suggestion to hide the list.
+    // Dismiss the keyboard
+    Keyboard.dismiss();
+    // Empty the suggestion to hide the list.
+    setSuggestions([]);
   };
 
   /**
@@ -94,16 +97,19 @@ const SearchBox: React.FC<Props> = (props) => {
    * @param {string} selectedItem Selected Item
    */
   const onSelected = (selectedItem: string) => {
-    setSuggestions([]); //Empty the list
-
+    // Empty the list
+    setSuggestions([]);
     // Get the last word index and create a sub string from 0 index to the last index where the searching word starts.
     const newValue =
       value.substr(0, value.lastIndexOf(helper.getLastWord(value))) +
       `${selectedItem} `; // Create the newValue from selected word. And append extra space at the end for continuous typing.
     console.log(textInput.current);
-    setValue(newValue); // Set the newValue to state hook
-    onValueChange && onValueChange(newValue); // If props contains value change listener then update the parent for value change.
-    textInput.current?.focus(); // Bring the focus to text input for continuous typing.
+    // Set the newValue to state hook
+    setValue(newValue);
+    // If props contains value change listener then update the parent for value change.
+    onValueChange && onValueChange(newValue);
+    // Bring the focus to text input for continuous typing.
+    textInput.current?.focus();
   };
 
   // Callback for debouncing function.
@@ -162,16 +168,17 @@ const styles = StyleSheet.create({
   textInput: {
     backgroundColor: 'white',
     color: '#19384a',
-    fontWeight: '700',
-    borderRadius: 10,
-    height: 40,
+    fontSize: 17,
+    fontWeight: '500',
+    borderRadius: 4,
+    height: 44,
     paddingHorizontal: 15,
     shadowColor: 'gray',
-    shadowOpacity: 1,
-    shadowRadius: 3,
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 1,
     },
     elevation: 12,
   },
