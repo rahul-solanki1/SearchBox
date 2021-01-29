@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Keyboard, StyleSheet, View} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {AutocompleteInput} from '../../Components';
+import {SearchBox} from '../../Components';
 import {MockAPI} from '../../Services/API';
 import {helper} from '../../Util';
 
@@ -51,10 +51,10 @@ const Home: React.FC<{}> = () => {
         containerStyle={styles.container}
         accessible={false}
         onPress={() => onFocusOut()}>
-        <AutocompleteInput
+        <SearchBox
           value={value}
           highlightWord={helper.getLastWord(value)}
-          suggestion={suggestions}
+          suggestions={suggestions}
           onValueChange={setValue}
           onFocus={() =>
             value.length && getSuggestions(helper.getLastWord(value))
