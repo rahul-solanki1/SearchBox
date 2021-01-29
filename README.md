@@ -11,7 +11,7 @@ You must have a React-Native environment setup on your machine. Follow the steps
 Install the dependencies and devDependencies and start the server.
 
 ```sh
-$ git clone <repo-url>
+$ git clone https://github.com/rahul-solanki1/SearchBox.git
 $ cd SearchBox
 $ yarn install
 $ npx pod-install
