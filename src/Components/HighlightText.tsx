@@ -10,6 +10,15 @@ interface Props {
   onSelected?: (value: string) => void;
 }
 
+/**
+ *
+ * @param {string} value text to show
+ * @param {string}  highlightWord text that should be highlighted in the passed value
+ * @param {TextStyle} textStyle Add style for the text
+ * @param {TextStyle} highlightedTextStyle Add style for highlighted text
+ * @param {(value: string) => void} onSelected Gives callback when the text is pressed.
+ *
+ */
 const HighlightText: React.FC<Props> = (props) => {
   const {
     value,
@@ -45,6 +54,8 @@ const HighlightText: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   itemText: {
+    color: '#19384a',
+    fontWeight: '600',
     borderColor: 'gray',
     padding: 10,
   },
