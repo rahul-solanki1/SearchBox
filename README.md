@@ -72,3 +72,5 @@ Please follow the below table for available style props.
 3. Created smaller components like `HighlightText` so that these can also be reused
 
 ## Demo
+
+![](SearchBar.gif)
