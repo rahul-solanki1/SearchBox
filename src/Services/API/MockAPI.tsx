@@ -41,6 +41,10 @@ async function getSuggestions(text: string) {
     }, randomTimeout);
   });
 
+  /**
+   * For enabling remote call.
+   */
+
   // try {
   //   const response = await fetch(`https://jsfiddle.net/jasmeetjaggi/zk1mf9ga/`);
   //   console.log(response);

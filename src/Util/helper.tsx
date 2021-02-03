@@ -17,7 +17,7 @@ export const helper = {
     } else {
       return words[words.length - 2];
     }
-    // return words.length ? : '';
+    // return words.length ? words[words.length - 1] : '';
   },
 
   /**
