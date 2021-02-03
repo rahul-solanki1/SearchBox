@@ -9,7 +9,7 @@ const getRandomBool = (n: number) => {
   return Math.floor(Math.random() * maxRandomCoeff) % n === 0;
 };
 
-const getSuggestions: (text: string) => Promise<string[]> = (text) => {
+async function getSuggestions(text: string) {
   var pre = 'pre';
   var post = 'post';
   var results: Array<string> = [];
@@ -40,7 +40,15 @@ const getSuggestions: (text: string) => Promise<string[]> = (text) => {
       }
     }, randomTimeout);
   });
-};
+
+  // try {
+  //   const response = await fetch(`https://jsfiddle.net/jasmeetjaggi/zk1mf9ga/`);
+  //   console.log(response);
+  //   return response;
+  // } catch (error) {
+  //   console.log(error);
+  // }
+}
 
 const MockAPI = {
   getRandomBool,
