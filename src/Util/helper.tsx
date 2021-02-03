@@ -12,7 +12,12 @@ export const helper = {
     // Split the sentence separated by space.
     let words = sentence.split(' ');
     // If words array is not emptry return the last element of the array or empty string.
-    return words.length ? words[words.length - 1] : '';
+    if (!words.length || words.length - 2 < 0) {
+      return '';
+    } else {
+      return words[words.length - 2];
+    }
+    // return words.length ? : '';
   },
 
   /**
